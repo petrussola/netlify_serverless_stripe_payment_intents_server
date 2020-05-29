@@ -9,6 +9,10 @@ router.get('/', (req, res) => {
 	res.json({ message: 'hi!' });
 });
 
+router.get('/test', (req, res) => {
+	res.json({ message: 'you are testing!' });
+});
+
 app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
