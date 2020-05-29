@@ -5,6 +5,8 @@ const app = express();
 
 const router = express.Router();
 
+app.use(cors());
+
 router.get('/', (req, res) => {
 	res.json({ message: 'hi!' });
 });
