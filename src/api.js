@@ -4,6 +4,9 @@ const serverless = require('serverless-http');
 const cors = require('cors');
 require('dotenv').config();
 
+// data
+const data = require('../data/data');
+
 // instantiate express
 const app = express();
 
@@ -13,7 +16,7 @@ const router = express.Router();
 app.use(cors());
 
 router.get('/', (req, res) => {
-	res.json({ message: 'hi!' });
+	res.json({ data: data });
 });
 
 router.get('/test', (req, res) => {
