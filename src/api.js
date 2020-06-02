@@ -25,11 +25,12 @@ router.get('/', (req, res) => {
 // generate payment intent
 router.post('/secret', async (req, res) => {
 	try {
-		const { amountCart } = req.body;
-		const amountInCents = amountCart * 100;
+		const { amount, shipping } = req.body;
+		const amountInCents = amount * 100;
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: amountInCents,
 			currency: 'eur',
+			shipping,
 			// Verify your integration in this guide by including this parameter
 			metadata: { integration_check: 'accept_a_payment' },
 		});
