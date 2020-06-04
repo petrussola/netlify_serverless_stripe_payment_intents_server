@@ -40,8 +40,47 @@ router.post('/secret', async (req, res) => {
 	}
 });
 
-router.get('/test', (req, res) => {
-	res.json({ message: 'you are testing!' });
+// payment intents demo endpoint
+router.get('/pi-demo', async (req, res) => {
+	try {
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: 1099,
+			currency: 'usd',
+			// Verify your integration in this guide by including this parameter
+			metadata: { integration_check: 'accept_a_payment' },
+			capture_method: 'manual',
+		});
+		res.json({
+			message: 'success',
+			client_secret: paymentIntent.client_secret,
+			id: paymentIntent.id,
+		});
+	} catch (error) {
+		res.json({ message: 'There was an error' });
+	}
+});
+
+router.post('/pi-demo-capture', async (req, res) => {
+	const { paymentIntentId } = req.body;
+	try {
+		const intent = await stripe.paymentIntents.capture(paymentIntentId);
+		res.json(intent);
+	} catch (error) {
+		console.log(error);
+	}
+});
+
+router.post('/refund', async (req, res) => {
+	const { paymentIntentId } = req.body;
+	try {
+		const refund = await stripe.refunds.create({
+			amount: 500,
+			payment_intent: paymentIntentId,
+		});
+		res.json(refund);
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 app.use(`/.netlify/functions/api`, router);
